@@ -1,0 +1,86 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/defaultFuncionario.xhtml">
+    <ui:define name="conteudo">
+        <h2>Cadastrar Alocações</h2>
+        <p:panel header="Alocações Cadastrados">  
+            <p:outputPanel id="alocação">
+                <p:dataTable id="dataTable" var="alocação"
+                           filteredValue="#{alocaçãoBean.alocaçõesFiltradas}"
+                           value="#{alocaçãoBean.all}"
+                           widgetVar="tabelaAlocações"
+                           emptyMessage="Nenhum registro encontrado">
+                    <p:column filterBy="voluntário" headerText="Nome do Voluntário" footerText="startsWith">
+                        <h:outputText value="#{alocação.voluntário.nome}" />  
+                    </p:column>
+                    
+                    <p:column filterBy="evento" headerText="Título do Evento" footerText="startsWith">
+                        <h:outputText value="#{alocação.evento.título}" />  
+                    </p:column>
+
+                    <p:column filterBy="evento.tipo" headerText="Tipo de Evento" footerText="exact" filterOptions="#{eventoBean.getTipos(true)}" filterMatchMode="exact">  
+                        <h:outputText value="#{alocação.evento.tipo}" />  
+                    </p:column>    
+                    
+                    <p:column headerText="Data e Hora">  
+                        <h:outputText value="#{alocação.dataHora}">
+                            <f:convertDateTime pattern="dd/MM/yyyy HH:mm" locale="pt_BR"/>
+                        </h:outputText>  
+                    </p:column>                  
+                    
+                    <p:column headerText="Ação">  
+                        <p:commandButton value="Consultar" 
+                                       action="#{alocaçãoBean.consultar(alocação)}"
+                                       oncomplete="panelAlocação.show();"
+                                       update=":form:displayAlocação"/>  
+                    </p:column>
+                </p:dataTable>
+                <p:panel>
+                    <p:commandButton value="Inserir"
+                                 actionListener="#{alocaçãoBean.inserir()}"
+                                 oncomplete="panelAlocação.show();"
+                                 update=":form:displayAlocação" />
+                </p:panel>
+            </p:outputPanel>
+        </p:panel>
+        
+        <p:panel  header="Dados da Alocação" id="dadosAlocação" 
+                 widgetVar="panelAlocação" visible="false" closable="true" style="margin-top:10px;">  
+            <p:messages id="erroAlocação"/> 
+            <h:panelGrid id="displayAlocação" columns="1" styleClass="grid">
+                <p:panel> 
+                    <h:panelGrid columns="3" columnClasses="label, value" styleClass="grid">  
+                        <h:outputText value="Nome do Voluntário" />
+                        <p:selectOneMenu id="nomeVoluntárioSelectOneMenu" value="#{alocaçãoBean.value.voluntário}" required="false" label="Nome do Cliente" style="width:100px">
+                            <f:selectItems value="#{voluntárioBean.all}"/>
+                        </p:selectOneMenu>
+                        <p:message for="nomeVoluntárioSelectOneMenu" />
+                        
+                        <h:outputText value="Título do Evento" />  
+                        <p:selectOneMenu id="títuloEventoSelectOneMenu" value="#{alocaçãoBean.value.evento}" required="false" label="Título do Evento" style="width:100px">
+                            <f:selectItems value="#{eventoBean.all}"/>
+                        </p:selectOneMenu>
+                        <p:message for="títuloEventoSelectOneMenu" />                                              
+                    </h:panelGrid>  
+                </p:panel> 
+                
+                <h:panelGroup>
+                    <p:commandButton value="Inserir" action="#{alocaçãoBean.save}"
+                               rendered="#{!alocaçãoBean.isConsultar()}" 
+                               ajax="false" icon="ui-icon-circle-plus" />
+                    <p:commandButton value="Alterar" action="#{alocaçãoBean.update}"
+                               rendered="#{alocaçãoBean.isConsultar()}"      
+                               ajax="false" icon="ui-icon-circle-plus" />  
+                    <p:commandButton value="Remover" action="#{alocaçãoBean.delete}"
+                               rendered="#{alocaçãoBean.isConsultar()}"
+                               ajax="false" icon="ui-icon-circle-plus" /> 
+                </h:panelGroup>
+            </h:panelGrid>  
+        </p:panel>  
+    </ui:define>
+</ui:composition>

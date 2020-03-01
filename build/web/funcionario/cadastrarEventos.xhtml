@@ -1,0 +1,111 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/defaultFuncionario.xhtml">
+    <ui:define name="conteudo">
+        <h2>Cadastrar Eventos</h2>
+        <p:panel header="Eventos Cadastrados">  
+            <p:outputPanel id="evento">
+                <p:dataTable id="dataTable" var="evento"
+                           filteredValue="#{eventoBean.eventosFiltrados}"
+                           value="#{eventoBean.all}"
+                           widgetVar="tabelaEventos"
+                           emptyMessage="Nenhum registro encontrado">
+                    <p:column filterBy="título" headerText="Título" footerText="startsWith">
+                        <h:outputText value="#{evento.título}" />  
+                    </p:column>
+                    
+                    <p:column filterBy="ano" headerText="Ano" footerText="startsWith">  
+                        <h:outputText value="#{evento.ano}" />  
+                    </p:column>    
+                    
+                    <p:column  filterMatchMode="exact" filterOptions="#{eventoBean.getTipos(true)}" filterBy="tipo" headerText="Tipo" footerText="exact">  
+                        <h:outputText value="#{evento.tipo}" />  
+                    </p:column>
+                    
+                    <p:column  filterMatchMode="exact" 
+                               filterOptions="#{horárioBean.getTurnos(true)}" 
+                               filterBy="horário" 
+                               headerText="Horário" 
+                               footerText="exact">  
+                        <h:outputText value="#{evento.horário.turno.label}" />
+                    </p:column>   
+                    
+                    <p:column filterBy="organizador" headerText="Organizador" footerText="startsWith">  
+                        <h:outputText value="#{evento.organizador.nome}" />  
+                    </p:column> 
+                    <p:column headerText="Ação">  
+                        <p:commandButton value="Consultar" 
+                                       action="#{eventoBean.consultar(evento)}"
+                                       oncomplete="panelEvento.show();"
+                                       update=":form:displayEvento"/>  
+                    </p:column>
+                </p:dataTable>
+                <p:panel>
+                    <p:commandButton value="Inserir"
+                                 actionListener="#{eventoBean.inserir()}"
+                                 oncomplete="panelEvento.show();"
+                                 update=":form:displayEvento" />
+                </p:panel>
+            </p:outputPanel>
+        </p:panel>
+        
+        <p:panel  header="Dados do Evento" id="dadosEvento" 
+                 widgetVar="panelEvento" visible="false" closable="true" style="margin-top:10px;">  
+            <p:messages id="erroEvento"/> 
+            <h:panelGrid id="displayEvento" columns="1" styleClass="grid">
+                <p:panel> 
+                    <h:panelGrid columns="3" columnClasses="label, value" styleClass="grid">  
+                        <h:outputText value="Título" />
+                        <p:inputText id="títuloInputText" required="false" label="Título"
+                                     value="#{eventoBean.value.título}" styleClass="ipt-large" />
+                        <p:message for="títuloInputText" />
+                        
+                        <h:outputText value="Ano" />  
+                        <p:inputMask mask="9999" id="anoInputMask" required="false" label="Ano" 
+                                     value="#{eventoBean.value.ano}"/>
+                        <p:message for="anoInputMask" />
+                        
+                        <h:outputText value="Tipo de Evento"/>
+                        <p:selectOneMenu id="tipoSelectOneMenu" required="false" label="Tipo" value="#{eventoBean.value.tipo}" 
+                                         styleClass="ipt-large" style="width: 100px">
+                            <f:selectItems value="#{eventoBean.getTipos(false)}" />
+                        </p:selectOneMenu>
+                        <p:message for="tipoSelectOneMenu"/> 
+                        
+                        <h:outputText value="Horário"/>
+                        <p:selectOneRadio id="horárioSelectOneRadio" required="false" label="Horário"                
+                                          value="#{eventoBean.value.horário}" styleClass="ipt-large">
+                            <f:selectItems value="#{horárioBean.all}" />
+                        </p:selectOneRadio>    
+                        <p:message for="horárioSelectOneRadio"/>
+                        
+                        <h:outputText value="Organizador"/> 
+                        <p:autoComplete id="organizadorAutoComplete" value="#{eventoBean.value.organizador}" completeMethod="#{organizadorBean.completaOrganizadores}" converter="#{organizadorConverter}" var="organizador" itemValue="#{organizador}" itemLabel="#{organizador.nome}"/>
+                        <p:message for="organizadorAutoComplete"/>  
+                                               
+                        <h:outputText value="Atividade"/> 
+                        <p:autoComplete id="atividadeAutoComplete" value="#{eventoBean.value.atividades}" completeMethod="#{atividadeBean.completaAtividades}" converter="#{atividadeConverter}" var="atividade" itemValue="#{atividade}" itemLabel="#{atividade.função}" multiple="true"/>
+                        <p:message for="atividadeAutoComplete"/>                        
+                    </h:panelGrid>  
+                </p:panel> 
+                
+                <h:panelGroup>
+                    <p:commandButton value="Inserir" action="#{eventoBean.save}"
+                               rendered="#{!eventoBean.isConsultar()}" 
+                               ajax="false" icon="ui-icon-circle-plus" />
+                    <p:commandButton value="Alterar" action="#{eventoBean.update}"
+                               rendered="#{eventoBean.isConsultar()}"      
+                               ajax="false" icon="ui-icon-circle-plus" />  
+                    <p:commandButton value="Remover" action="#{eventoBean.delete}"
+                               rendered="#{eventoBean.isConsultar()}"
+                               ajax="false" icon="ui-icon-circle-plus" /> 
+                </h:panelGroup>
+            </h:panelGrid>  
+        </p:panel>  
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,66 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                template="/template/defaultFuncionario.xhtml">
+
+    <ui:define name="conteudo">
+        
+        <h2>Área do Funcionário</h2>
+
+            <p:fieldset legend="Cadastro de Voluntários" style="margin-bottom: 20px;">  
+                <h:panelGrid>
+                    <h:outputLink value="cadastrarVoluntários.jsf">Cadastrar Voluntários</h:outputLink>
+                </h:panelGrid>
+                <h:panelGrid>
+                    <h:outputLink value="index.jsf">Validar Cadastros Submetidos pelos Voluntários</h:outputLink>
+                </h:panelGrid>
+            </p:fieldset>  
+
+            <p:fieldset legend="Cadastro do Acervo de Informações" style="margin-bottom: 20px;">  
+                <h:panelGrid>
+                    <h:outputLink value="cadastrarOrganizadores.jsf">Cadastrar Organizadores</h:outputLink>
+                </h:panelGrid> 
+                <h:panelGrid>
+                    <h:outputLink value="cadastrarAtividades.jsf">Cadastrar Atividades</h:outputLink>
+                </h:panelGrid> 
+                <h:panelGrid>
+                    <h:outputLink value="cadastrarEventos.jsf">Cadastrar Eventos</h:outputLink>
+                </h:panelGrid> 
+                <h:panelGrid>
+                    <h:outputLink value="index.jsf">Cadastrar Edições de Eventos</h:outputLink>
+                </h:panelGrid>
+            </p:fieldset>
+
+            <p:fieldset legend="Confirmações" style="margin-bottom: 20px;">  
+                <h:panelGrid>
+                    <h:outputLink value="cadastrarHorários.jsf">Cadastrar Horários</h:outputLink>
+                </h:panelGrid> 
+                <h:panelGrid>
+                    <h:outputLink value="index.jsf">Confirmar Edições de Eventos</h:outputLink>
+                </h:panelGrid>
+                <h:panelGrid>
+                    <h:outputLink value="index.jsf">Revogar Edição de Evento</h:outputLink>
+                </h:panelGrid>
+            </p:fieldset>
+
+            <p:fieldset legend="Alocações" style="margin-bottom: 20px;">  
+                <h:panelGrid>
+                    <h:outputLink value="alocarVoluntários.jsf">Alocar Voluntários</h:outputLink>
+                </h:panelGrid>
+            </p:fieldset>
+
+            <p:fieldset legend="Pesquisas" style="margin-bottom: 20px;">  
+                <h:panelGrid>
+                    <h:outputLink value="index.jsf">Pesquisar Eventos</h:outputLink>
+                </h:panelGrid>
+                <h:panelGrid>
+                    <h:outputLink value="index.jsf">Pesquisar Edições de Evento</h:outputLink>
+                </h:panelGrid>
+            </p:fieldset>        
+        
+    </ui:define>
+
+</ui:composition>

@@ -1,0 +1,92 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/defaultFuncionario.xhtml">
+
+    <ui:define name="conteudo">
+
+        <h2>Cadastrar Horários</h2>
+
+                <p:panel header="Horários Cadastradas">  
+                  
+                  <p:outputPanel id="horário">
+                      
+                      <p:dataTable id="dataTable" var="horário"
+                                   value="#{horárioBean.all}"
+                                   widgetVar="tabelaHorários"
+                                   emptyMessage="Nenhum registro encontrado">
+                          
+                          <p:column headerText="Turno">  
+                              <h:outputText value="#{horário.turno}" />  
+                          </p:column>  
+                           
+                          <p:column headerText="Valor da Refeição em Trabalho">  
+                              <h:outputText value="#{horário.valor}" />  
+                          </p:column>                          
+                          
+                          <p:column headerText="Ação">  
+                              <p:commandButton value="Consultar" 
+                                               action="#{horárioBean.consultar(horário)}"
+                                               oncomplete="panelHorário.show();"
+                                               update=":form:displayHorário"/>  
+                          </p:column>
+
+                      </p:dataTable>
+                        
+                    <p:panel>
+                      <p:commandButton value="Inserir"
+                                         actionListener="#{horárioBean.inserir()}"
+                                         oncomplete="panelHorário.show();"
+                                         update=":form:displayHorário" />
+                    </p:panel>
+
+                  </p:outputPanel>
+                  
+                </p:panel>
+
+        <p:panel  header="Dados da Horário" id="dadosHorário" 
+                 widgetVar="panelHorário" visible="false" closable="true" style="margin-top:10px;">  
+
+                      <p:messages id="erroEvento"/> 
+
+                      <h:panelGrid id="displayHorário" columns="1" styleClass="grid">
+                          
+                       <p:panel> 
+                                  <h:panelGrid columns="3" columnClasses="label, value" styleClass="grid">  
+
+                                      <h:outputText value="Turno" />
+                                      <p:selectOneMenu id="turnoSelectOneMenu" required="false" label="Turno"
+                                                       value="#{horárioBean.value.turno}" style="width:200px">
+                                            <f:selectItems value="#{horárioBean.getTurnos(false)}"/>
+                                      </p:selectOneMenu>
+                                      <p:message for="turnoSelectOneMenu" />
+
+                                      <h:outputText value="Valor da Refeição em Trabalho" />  
+                                      <p:inputText id="valorInputText" required="false" label="Valor"
+                                                   styleClass="ipt-large" value="#{horárioBean.value.valor}"/>
+                                      <p:message for="valorInputText" />                                                                            
+                                  </h:panelGrid>  
+
+                      </p:panel> 
+                          <h:panelGroup>
+                              <p:commandButton value="Inserir" action="#{horárioBean.save}"
+                                         rendered="#{!horárioBean.isConsultar()}" 
+                                         ajax="false" icon="ui-icon-circle-plus" />
+                              <p:commandButton value="Alterar" action="#{horárioBean.update}"
+                                         rendered="#{horárioBean.isConsultar()}"      
+                                         ajax="false" icon="ui-icon-circle-plus" />  
+                              <p:commandButton value="Remover" action="#{horárioBean.delete}"
+                                         rendered="#{horárioBean.isConsultar()}"
+                                         ajax="false" icon="ui-icon-circle-plus" /> 
+                          </h:panelGroup>
+
+                      </h:panelGrid>  
+                  </p:panel>  
+
+    </ui:define>
+
+</ui:composition>

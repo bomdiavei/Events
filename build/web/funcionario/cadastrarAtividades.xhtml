@@ -1,0 +1,82 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/defaultFuncionario.xhtml">
+    <ui:define name="conteudo">
+        <h2>Cadastrar Atividades</h2>
+
+        <p:panel header="Atividades Cadastradas">  
+
+            <p:outputPanel id="atividade">
+
+                <p:dataTable id="dataTable" var="atividade"
+                           filteredValue="#{atividadeBean.atividadesFiltradas}"
+                           value="#{atividadeBean.all}"
+                           widgetVar="tabelaAtividades"
+                           emptyMessage="Nenhum registro encontrado">
+
+                    <p:column filterBy="função" headerText="Função" footerText="startsWith">  
+                        <h:outputText value="#{atividade.função}" />  
+                    </p:column>  
+
+                    <p:column headerText="Quantidade Necessária">  
+                        <h:outputText value="#{atividade.quantidadeNecessária}" />  
+                    </p:column>
+
+                    <p:column headerText="Ação">  
+                        <p:commandButton value="Consultar" 
+                                       action="#{atividadeBean.consultar(atividade)}"
+                                       oncomplete="panelAtividade.show();"
+                                       update=":form:displayAtividade"/>  
+                    </p:column>
+
+                </p:dataTable>
+
+                <p:panel>
+                    <p:commandButton value="Inserir"
+                                     actionListener="#{atividadeBean.inserir()}"
+                                     oncomplete="panelAtividade.show();"
+                                     update=":form:displayAtividade" />
+                </p:panel>
+            </p:outputPanel>                  
+        </p:panel>
+
+        <p:panel  header="Dados das Atividades" id="dadosAtividade" 
+                 widgetVar="panelAtividade" visible="false" closable="true" style="margin-top:10px;">  
+
+            <p:messages id="erroEvento"/> 
+
+            <h:panelGrid id="displayAtividade" columns="1" styleClass="grid">
+                <p:panel> 
+                    <h:panelGrid columns="3" columnClasses="label, value" styleClass="grid">  
+                        <h:outputText value="Função *" />
+                        <p:inputText id="funçãoInputText" required="false" label="Função"
+                                     value="#{atividadeBean.value.função}" styleClass="ipt-large" />
+                        <p:message for="funçãoInputText" />
+
+                        <h:outputText value="Quantidade Necessária" />
+                        <p:inputText id="quantidadeNecessáriaInputText" required="false" label="Quantidade Necessária"
+                                     value="#{atividadeBean.value.quantidadeNecessária}" styleClass="ipt-large" />
+                        <p:message for="quantidadeNecessáriaInputText" />
+                    </h:panelGrid>  
+                </p:panel> 
+                
+                <h:panelGroup>
+                    <p:commandButton value="Inserir" action="#{atividadeBean.save}"
+                               rendered="#{!atividadeBean.isConsultar()}" 
+                               ajax="false" icon="ui-icon-circle-plus" />
+                    <p:commandButton value="Alterar" action="#{atividadeBean.update}"
+                               rendered="#{atividadeBean.isConsultar()}"      
+                               ajax="false" icon="ui-icon-circle-plus" />  
+                    <p:commandButton value="Remover" action="#{atividadeBean.delete}"
+                               rendered="#{atividadeBean.isConsultar()}"
+                               ajax="false" icon="ui-icon-circle-plus" /> 
+                </h:panelGroup>
+            </h:panelGrid>  
+        </p:panel>  
+    </ui:define>
+</ui:composition>
