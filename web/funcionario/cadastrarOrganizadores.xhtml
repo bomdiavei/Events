@@ -1,0 +1,92 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<!DOCTYPE composition PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="http://java.sun.com/jsf/html"
+                xmlns:f="http://java.sun.com/jsf/core"
+                xmlns:ui="http://java.sun.com/jsf/facelets"
+                xmlns:p="http://primefaces.org/ui"
+                template="/template/defaultFuncionario.xhtml">
+
+    <ui:define name="conteudo">
+
+        <h2>Cadastrar Organizadores</h2>
+
+                <p:panel header="Organizadores Cadastrados">  
+                  
+                  <p:outputPanel id="organizador">
+                      
+                      <p:dataTable id="dataTable" var="organizador"
+                                   filteredValue="#{organizadorBean.organizadoresFiltrados}"
+                                   value="#{organizadorBean.all}"
+                                   widgetVar="tabelaOrganizadores"
+                                   emptyMessage="Nenhum registro encontrado">
+                          
+                          <p:column filterBy="nome" headerText="Nome" footerText="startsWith">  
+                              <h:outputText value="#{organizador.nome}" />  
+                          </p:column>  
+                           
+                          <p:column headerText="É Ordenado(a)">  
+                              <h:outputText value="#{organizador.ordenado}" />  
+                          </p:column>
+                           
+                          <p:column headerText="Ação">  
+                              <p:commandButton value="Consultar" 
+                                               action="#{organizadorBean.consultar(organizador)}"
+                                               oncomplete="panelOrganizador.show();"
+                                               update=":form:displayOrganizador"/>  
+                          </p:column>
+
+                      </p:dataTable>
+                        
+                    <p:panel>
+                      <p:commandButton value="Inserir"
+                                         actionListener="#{organizadorBean.inserir()}"
+                                         oncomplete="panelOrganizador.show();"
+                                         update=":form:displayOrganizador" />
+                    </p:panel>
+
+                  </p:outputPanel>
+                  
+                </p:panel>
+
+        <p:panel  header="Dados do Organizador" id="dadosOrganizador" 
+                 widgetVar="panelOrganizador" visible="false" closable="true" style="margin-top:10px;">  
+
+                      <p:messages id="erroEvento"/> 
+
+                      <h:panelGrid id="displayOrganizador" columns="1" styleClass="grid">
+                          
+                       <p:panel> 
+
+                                  <h:panelGrid columns="3" columnClasses="label, value" styleClass="grid">  
+
+                                      <h:outputText value="Nome *" />
+                                      <p:inputText id="nomeInputText" required="false" label="Nome"
+                                                   value="#{organizadorBean.value.nome}" styleClass="ipt-large" />
+                                      <p:message for="nomeInputText" />
+
+                                      <h:outputText value="É Ordenado(a)" />  
+                                      <p:selectBooleanCheckbox id="ordenadoSelectBooleanCheckbox"
+                                                               value="#{organizadorBean.value.ordenado}" />
+                                      <p:message for="ordenadoSelectBooleanCheckbox" />
+                                      
+                                  </h:panelGrid>  
+
+                      </p:panel> 
+                          <h:panelGroup>
+                              <p:commandButton value="Inserir" action="#{organizadorBean.save}"
+                                         rendered="#{!organizadorBean.isConsultar()}" 
+                                         ajax="false" icon="ui-icon-circle-plus" />
+                              <p:commandButton value="Alterar" action="#{organizadorBean.update}"
+                                         rendered="#{organizadorBean.isConsultar()}"      
+                                         ajax="false" icon="ui-icon-circle-plus" />  
+                              <p:commandButton value="Remover" action="#{organizadorBean.delete}"
+                                         rendered="#{organizadorBean.isConsultar()}"
+                                         ajax="false" icon="ui-icon-circle-plus" /> 
+                          </h:panelGroup>
+                      </h:panelGrid>  
+                  </p:panel>  
+
+    </ui:define>
+
+</ui:composition>
